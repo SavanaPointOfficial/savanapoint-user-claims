@@ -6,8 +6,9 @@ export const createClaims = async (req, res) => {
     const { token } = req.headers;
     const { claims } = req.body;
      
-    const uid = await (await adminAuth.verifyIdToken(token)).uid;
-     console.log(uid)
+    try {
+        const uid = await (await adminAuth.verifyIdToken(token)).uid;
+     
    await adminAuth.setCustomUserClaims(uid, claims)
     .then(user => {
         
@@ -15,6 +16,9 @@ export const createClaims = async (req, res) => {
     }).catch(error => {
         return res.json(error)
     })
+    } catch (error) {
+        return res.json(error)
+    }
 }
 
 export const getClaims = (req, res) => {
